@@ -1,0 +1,83 @@
+.promoted-container {
+  max-width: 1280px;
+  margin: 20px auto;
+  padding: 0 16px;
+  font-family: Roboto, Arial, sans-serif;
+}
+
+.promoted-header {
+  font-size: 14px;
+  font-weight: 700;
+  color: #002f34;
+  text-transform: uppercase;
+  margin-bottom: 15px;
+  border-bottom: 1px solid #ebf1f2;
+  padding-bottom: 10px;
+}
+
+/* 🔥 EXACTLY 3 PER ROW */
+.promoted-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.promoted-card {
+  border: 1px solid #ebf1f2;
+  border-radius: 4px;
+  overflow: hidden;
+  background: #fff;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.promoted-card:hover {
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transform: translateY(-3px);
+}
+
+.media-wrapper {
+  width: 100%;
+  aspect-ratio: 16/9;
+  background: #000;
+}
+
+.media-wrapper img,
+.media-wrapper video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.promoted-content {
+  padding: 12px;
+}
+
+.promoted-source {
+  font-size: 12px;
+  color: #406367;
+  margin-bottom: 4px;
+}
+
+.promoted-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #002f34;
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+@media (max-width: 1024px) {
+  .promoted-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .promoted-grid {
+    grid-template-columns: 1fr;
+  }
+}

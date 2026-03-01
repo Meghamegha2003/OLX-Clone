@@ -1,0 +1,140 @@
+.category-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 20px;
+  background: #fff;
+  border-bottom: 1px solid #e5e5e5 ;     
+    padding-left: 110px;
+        height: 52px;
+}
+
+.all-category-btn {
+  background: #0078fa;
+    color: white;
+    border: none;
+    padding: 9px 12px;
+    border-radius: 25px;
+    font-weight: 600;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.category-scroll {
+  display: flex;
+  gap: 4px;
+  overflow-x: auto;
+  scroll-behavior: smooth;
+}
+
+.category-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.category-pill {
+    background: white;
+    padding: 8px 13px;
+    border-radius: 25px;
+    font-size: 12px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.2s;
+    border: 1px solid #d9dadb;
+}
+
+.category-pill:hover {
+  background: #e0e0e0;
+}
+.current-date {
+  font-size: 14px;
+  font-weight: 500;
+  color: #666;
+  display: flex;
+  align-items: center;
+  padding-left: 10px;
+  white-space: nowrap;
+}
+.date-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.separator {
+  width: 2px;
+    height: 19px;
+    background-color: #ccc;
+    margin-top: 1%;
+    margin-left: 5px;
+}
+
+
+@media (max-width: 1200px) {
+  .all-category-btn {
+    padding: 7px 10px;
+    font-size: 12px;
+  }
+  .category-pill {
+    padding: 6px 10px;
+    font-size: 11px;
+  }
+  .current-date {
+    font-size: 13px;
+  }
+}
+
+/* Medium screens <=992px */
+@media (max-width: 992px) {
+  .all-category-btn {
+    padding: 6px 9px;
+    font-size: 11px;
+  }
+  .category-pill {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  .current-date {
+    font-size: 12px;
+  }
+}
+
+/* Small screens <=768px */
+@media (max-width: 768px) {
+  .category-wrapper {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+  .all-category-btn {
+    padding: 5px 8px;
+    font-size: 10px;
+  }
+  .category-pill {
+    padding: 4px 6px;
+    font-size: 9px;
+  }
+  .current-date {
+    font-size: 11px;
+  }
+}
+
+/* Extra small screens <=480px */
+@media (max-width: 480px) {
+  .category-wrapper {
+    padding-left: 5px;
+    padding-right: 5px;
+    gap: 4px;
+  }
+  .all-category-btn {
+    padding: 8px 6px;
+    font-size: 7px;
+  }
+  .category-pill {
+    padding: 5px 5px;
+    font-size: 7px;
+  }
+  .current-date {
+    font-size: 10px;
+    padding-left: 3px;
+  }
+}
+

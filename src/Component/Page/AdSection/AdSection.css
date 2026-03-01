@@ -1,0 +1,18 @@
+.ad-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.ad-wrapper {
+  width: 90%;
+  max-width: 1280px;
+  cursor: pointer;
+  margin-left: 10%;
+}
+
+.ad-image {
+  width: 90%;
+  height: auto;
+  display: block;
+}
