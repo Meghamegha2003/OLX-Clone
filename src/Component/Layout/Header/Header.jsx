@@ -1,16 +1,31 @@
-import React from 'react';
-import Logo from '../../assets/Logo';
-import LocationSearchBar from './Location/LocationSearchBar';
+import React, { useEffect, useState } from 'react';
+import Logo from '../../../assets/Logo';
+import LocationSearchBar from '../../Layout/Header/Location/LocationSearchBar'
 import SearchBar from './SearchBar/SearchBar';
 import './Header.css';
-import SellButton from '../../assets/SellButton';
-import SellButtonPlus from '../../assets/SellButtonPlus';
+import SellButton from '../../../assets/SellButton';
+import SellButtonPlus from '../../../assets/SellButtonPlus';
+import { useNavigate } from 'react-router-dom';
+import { onAuthStateChanged,signOut } from 'firebase/auth';
+import { auth } from '../../../firebase/Firebase';
+import { Link } from "react-router-dom";
 
 const Header = () => {
+
+  const [user,setUser] = useState(null)
+  const navigate = useNavigate()
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+
+  useEffect(()=>{
+    const unsubscribe = onAuthStateChanged(auth,(currentUser)=>{
+      setUser(currentUser)
+    })
+    return ()=>unsubscribe()
+  },[])
   return (
     <header className="olx-header">
 
-      {/* LEFT SECTION */}
       <div className="header-left">
 
         <div className="header-item logo-wrapper">
@@ -51,20 +66,44 @@ const Header = () => {
   </div>
 
   <div className="header-item login-wrapper">
-    <button type="button" className="header-btn vertical-btn">
-      <svg
-        width="32"
-        height="32"
-        viewBox="6 -4 30 29"
-        fill="#003670"   // icon color
-      >
-        <path d="M20 11C24.549 11 28.25 14.701 28.25 19.25L27.333 20.166H12.667L11.75 19.25C11.75 14.701 15.451 11 20 11ZM20 12.833C16.773 12.833 14.094 15.228 13.648 18.333H26.352C25.906 15.228 23.227 12.833 20 12.833ZM20 1.833C22.274 1.833 24.125 3.684 24.125 5.958C24.125 8.233 22.274 10.083 20 10.083C17.726 10.083 15.875 8.233 15.875 5.958C15.875 3.684 17.726 1.833 20 1.833ZM20 3.666C18.736 3.666 17.708 4.695 17.708 5.958C17.708 7.222 18.736 8.25 20 8.25C21.264 8.25 22.292 7.222 22.292 5.958C22.292 4.695 21.264 3.666 20 3.666Z"/>
-      </svg>
-      <span style={{ color: "#003670"}}>Login</span>
+  {!user ? (
+    <button 
+      onClick={() => navigate('/login')} 
+      className="header-btn vertical-btn"
+    >
+      <span style={{ color: "#003670" }}>Login</span>
     </button>
-  </div>
+  ) : (
+    <div className="profile-container">
+      <img
+        src={user.photoURL || "https://cdn-icons-png.flaticon.com/512/149/149071.png"}
+        alt="profile"
+        className="profile-image"
+        onClick={() => setDropdownOpen(!dropdownOpen)}
+      />
+
+      {dropdownOpen && (
+        <div className="profile-dropdown">
+          <p className="profile-email">
+            {user.displayName || user.email}
+          </p>
+          <button
+            onClick={() => {
+              signOut(auth);
+              navigate('/login');
+            }}
+            className="logout-btn"
+          >
+            Logout
+          </button>
+        </div>
+      )}
+    </div>
+  )}
+</div>
 
   <div className="header-item sell-wrapper">
+      <Link to="/postad" style={{ textDecoration: "none", color: "inherit" }}>
     <div className="sellMenu">
 
       <div className="sell-button-wrapper">
@@ -84,6 +123,7 @@ const Header = () => {
       </div>
 
     </div>
+    </Link>
   </div>
 
 </div>

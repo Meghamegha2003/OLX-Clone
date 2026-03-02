@@ -1,6 +1,6 @@
 import React from 'react';
 import "./LocationSearchBar.css";
-import LocationPin from '../../../assets/LocationPin'; // Make sure this icon is blue
+import LocationPin from '../../../../assets/LocationPin'
 
 const LocationSearchBar = ({ value = "India" }) => {
   return (
