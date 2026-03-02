@@ -7,9 +7,9 @@ const ProductCard = ({ product }) => {
 
   return (
     <li className="card-item">
-      <Link to={`/view/${product.id}`} className="card-link">
+      <Link to={`/view/${product.id}`} state={{ product }} className="card-link">
         <div className="image-wrapper">
-          <img src={product.images} alt={product.title} />
+          <img src={product.images?.[0]} alt={product.title} />
 
           {product.featured && <span className="badge">FEATURED</span>}
 
