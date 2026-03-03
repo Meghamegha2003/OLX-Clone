@@ -16,11 +16,25 @@ const categories = [
   { name: "Services", img: "https://apollo.olx.in/v1/files/w8xoeez49ut03-PANAMERA/image;original=true" },
 ];
 
-const HomeCategories = () => {
+const HomeCategories = ({ selectedCategory, setSelectedCategory }) => {
   return (
     <div className="categories-container">
+      <div
+        className={`category-card ${selectedCategory === "" ? "active" : ""}`}
+        onClick={() => setSelectedCategory("")}
+      >
+        <div className="image-box">
+          <img src="https://img.icons8.com/ios/50/000000/menu--v1.png" style={{    width: '37px', height: '43px'}} alt="All Categories" />
+        </div>
+        <span>All</span>
+      </div>
+
       {categories.map((item, index) => (
-        <div key={index} className="category-card">
+        <div
+          key={index}
+          className={`category-card ${selectedCategory === item.name ? "active" : ""}`}
+          onClick={() => setSelectedCategory(item.name)}
+        >
           <div className="image-box">
             <img src={item.img} alt={item.name} />
           </div>

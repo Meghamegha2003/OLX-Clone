@@ -4,56 +4,44 @@ import Logo from "../../assets/Logo";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../../firebase/Firebase";
-import toast, { Toaster } from "react-hot-toast";
+import {showToast} from '../../utility/toster'
+
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const toastOptions = { style: { background: "#003670", color: "#fff" } };
 
-  const firebaseErrorMessages = {
-    "auth/invalid-email": "Please enter a valid email address",
-    "auth/user-not-found": "No account found with this email",
-    "auth/wrong-password": "Incorrect password. Please try again",
-    "auth/invalid-credential": "Invalid login credentials. Please check your email and password",
-    "auth/too-many-requests": "Too many login attempts. Please try again later",
-    "auth/network-request-failed": "Network error. Please check your connection",
-  };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+ const handleSubmit = async (e) => {
+  e.preventDefault();
 
-    if (!email.trim() && !password.trim()) {
-      toast("Please enter your email and password", toastOptions);
-      return;
-    }
+  if (!email.trim() && !password.trim()) {
+    showToast.custom("Please enter your email and password");
+    return;
+  }
 
-    if (!email.trim()) {
-      toast("Please enter your email", toastOptions);
-      return;
-    }
+  if (!email.trim()) {
+    showToast.custom("Please enter your email");
+    return;
+  }
 
-    if (!password.trim()) {
-      toast("Please enter your password", toastOptions);
-      return;
-    }
+  if (!password.trim()) {
+    showToast.custom("Please enter your password");
+    return;
+  }
 
-    try {
-      await signInWithEmailAndPassword(auth, email.trim(), password.trim());
-      toast("Login successful! Redirecting...", toastOptions);
-      navigate("/");
-    } catch (error) {
-      const message =
-        firebaseErrorMessages[error.code] || "Something went wrong. Please try again";
-      toast(message, toastOptions);
-    }
-  };
-
+  try {
+    await signInWithEmailAndPassword(auth, email.trim(), password.trim());
+    showToast.custom("Login successful! Redirecting...");
+    navigate("/");
+  } catch (error) {
+    showToast.firebaseError(error.code);
+  }
+};
   return (
     <div className="login-page">
-      <Toaster position="top-right" reverseOrder={false} />
       <div className="login-container">
         <div className="login-left">
           <Logo />

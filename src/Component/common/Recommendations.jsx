@@ -1,43 +1,39 @@
 import React, { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
 import "./recommendations.css";
-import {collection,getDocs} from "firebase/firestore"
-import {db} from "../../firebase/Firebase"
+import { collection, getDocs } from "firebase/firestore";
+import { db } from "../../firebase/Firebase";
 
-const Recommendations = () => {
-  const [ads,setAds] = useState([])
-  const [visibleCount, setVisibleCount] = useState(8); 
+const Recommendations = ({ selectedCategory }) => {
+  const [ads, setAds] = useState([]);
+  const [visibleCount, setVisibleCount] = useState(8);
 
-  useEffect(()=>{
-    const fetchAds = async()=>{
-      try {
-        const query = await getDocs(collection(db,'ads'))
-        const adsData = query.docs.map(doc=>({
-          id:doc.id,
-          ...doc.data()
-        }))
-                  setAds(adsData)
-      } catch (error) {
-        console.error("Error fetching ads:", error);
-      }
-    }
-     fetchAds();
-  },[])
+  useEffect(() => {
+    const fetchAds = async () => {
+      const query = await getDocs(collection(db, "ads"));
+      const adsData = query.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+      setAds(adsData);
+    };
+    fetchAds();
+  }, []);
+
   const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 4); 
+    setVisibleCount((prev) => prev + 8);
   };
+
+  const filteredAds = selectedCategory
+    ? ads.filter((ad) => ad.category === selectedCategory)
+    : ads;
 
   return (
     <div className="recommendations">
       <h2 className="heading">Fresh recommendations</h2>
-
       <ul className="card-container">
-        {ads.slice(0, visibleCount).map((item) => (
+        {filteredAds.slice(0, visibleCount).map((item) => (
           <ProductCard key={item.id} product={item} />
         ))}
       </ul>
-
-      {visibleCount < ads.length && (
+      {visibleCount < filteredAds.length && (
         <div className="load-more-container">
           <button className="load-more-btn" onClick={handleLoadMore}>
             Load more

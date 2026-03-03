@@ -3,7 +3,7 @@ import "./Signup.css";
 import Logo from "../../assets/Logo";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import toast, { Toaster } from "react-hot-toast";
+import { showToast } from "../../utility/toster"; 
 
 const Signup = () => {
   const [userName, setUserName] = useState("");
@@ -13,53 +13,47 @@ const Signup = () => {
   const navigate = useNavigate();
   const { signup } = useAuth();
 
-  const toastOptions = { style: { background: "#003670", color: "#fff" } };
 
-  const firebaseErrorMessages = {
-    "auth/email-already-in-use": "This email is already registered",
-    "auth/invalid-email": "Please enter a valid email address",
-    "auth/weak-password": "Password should be at least 6 characters",
-    "auth/operation-not-allowed": "Signup not allowed. Contact support",
-    "auth/network-request-failed": "Network error. Please check your connection",
-  };
+ const handleFn = async (e) => {
+  e.preventDefault();
 
-  const handleFn = async (e) => {
-    e.preventDefault();
+  if (!userName.trim() || !email.trim() || !password.trim() || !PhoneNumber.trim()) {
+    showToast.custom("Please fill all fields");
+    return;
+  }
 
-    if (!userName.trim() || !email.trim() || !password.trim() || !PhoneNumber.trim()) {
-      toast("Please fill all fields", toastOptions);
-      return;
-    }
+  if (userName.trim().length < 3) {
+    showToast.custom("Name must be at least 3 characters");
+    return;
+  }
 
-    if (userName.trim().length < 3) {
-      toast("Name must be at least 3 characters", toastOptions);
-      return;
-    }
+  if (password.trim().length < 6) {
+    showToast.custom("Password must be at least 6 characters");
+    return;
+  }
 
-    if (password.trim().length < 6) {
-      toast("Password must be at least 6 characters", toastOptions);
-      return;
-    }
+  if (!/^\d{10}$/.test(PhoneNumber.trim())) {
+    showToast.custom("Phone number must be 10 digits");
+    return;
+  }
 
-    if (!/^\d{10}$/.test(PhoneNumber.trim())) {
-      toast("Phone number must be 10 digits", toastOptions);
-      return;
-    }
+  try {
+    await signup(
+      email.trim(),
+      password.trim(),
+      userName.trim(),
+      PhoneNumber.trim()
+    );
 
-    try {
-      await signup(email.trim(), password.trim(), userName.trim(), PhoneNumber.trim());
-      toast("Account created successfully!", toastOptions);
-      navigate("/login");
-    } catch (error) {
-      const message =
-        firebaseErrorMessages[error.code] || "Something went wrong. Please try again";
-      toast(message, toastOptions);
-    }
-  };
+    showToast.custom("Account created successfully!");
+    navigate("/login");
+  } catch (error) {
+    showToast.firebaseError(error.code);
+  }
+};
 
   return (
     <div className="signup-page">
-      <Toaster position="top-right" reverseOrder={false} />
       <div className="signup-container">
         <div className="signup-left">
           <Logo />

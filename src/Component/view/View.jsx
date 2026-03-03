@@ -14,41 +14,64 @@ const View = () => {
   const [loading, setLoading] = useState(!product);
   const [mainImage, setMainImage] = useState("");
 
+  const formattedDate = product?.createdAt?.seconds
+    ? new Date(product.createdAt.seconds * 1000).toLocaleString("en-IN")
+    : "N/A";
+
   useEffect(() => {
-    if (!product && id) {
-      const fetchProduct = async () => {
-        setLoading(true);
-        try {
-          const docRef = doc(db, "products", id);
-          const docSnap = await getDoc(docRef);
+    const fetchProduct = async () => {
+      setLoading(true);
+      try {
+        const docRef = doc(db, "ads", id);
+        const docSnap = await getDoc(docRef);
 
-          if (docSnap.exists()) {
-            const data = { id: docSnap.id, ...docSnap.data() };
-            setProduct(data);
-            setMainImage(data.images?.[0] || "/placeholder.png");
-          } else {
-            setProduct(null);
-          }
-        } catch (error) {
-          console.error("Error fetching product:", error);
+        if (docSnap.exists()) {
+          const data = { id: docSnap.id, ...docSnap.data() };
+          setProduct(data);
+          setMainImage(data.images?.[0] || "/placeholder.png");
+        } else {
           setProduct(null);
-        } finally {
-          setLoading(false);
+          setMainImage("/placeholder.png");
         }
-      };
+      } catch (error) {
+        console.error("Error fetching product:", error);
+        setProduct(null);
+        setMainImage("/placeholder.png");
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchProduct();
-    } else if (product) {
-      setMainImage(product.images?.[0] || "/placeholder.png");
-    }
-  }, [id, product]);
+    if (id) fetchProduct();
+  }, [id]);
 
   if (loading) return <p>Loading product...</p>;
-  if (!product) return <p>Product not found!</p>;
+
+  if (!product) {
+    return (
+      <div className="product-notfound">
+        <picture>
+          <source
+            type="image/webp"
+            srcSet="https://statics.olx.in/external/base/img/no-publications.webp"
+          />
+          <img
+            src="https://statics.olx.in/external/base/img/no-publications.png"
+            alt="No Ads"
+            className="olx-empty-image"
+          />
+        </picture>
+        <h2>Oops! Product Not Found</h2>
+        <p>This product might have been removed or the link is invalid.</p>
+        <button className="back-btn" onClick={() => window.history.back()}>
+          Go Back
+        </button>
+      </div>
+    );
+  }
 
   return (
     <div className="view-container">
-      {/* Left: Images */}
       <div className="image-section">
         {product.featured && <span className="badge">FEATURED</span>}
         <button
@@ -79,15 +102,19 @@ const View = () => {
         )}
       </div>
 
-      {/* Right: Details */}
       <div className="details-section">
         <h1 className="title">{product.title}</h1>
         <div className="price">₹ {product.price}</div>
-        {product.details && <p className="description">{product.details}</p>}
-
+        <p className="description">
+          {product.description || "No description available."}
+        </p>
         <div className="info-row">
-          <span><strong>Location:</strong> {product.location || "N/A"}</span>
-          <span><strong>Posted on:</strong> {product.date || "N/A"}</span>
+          <span>
+            <strong>Location:</strong> {product.location || "N/A"}
+          </span>
+          <span>
+            <strong>Posted on:</strong> {formattedDate}
+          </span>
         </div>
 
         <div className="action-buttons">
